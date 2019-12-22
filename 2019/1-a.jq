@@ -1,0 +1,1 @@
+map(. / 3 | floor - 2) | add
