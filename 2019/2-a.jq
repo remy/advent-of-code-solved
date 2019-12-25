@@ -1,4 +1,3 @@
-
 split(",") | map(tonumber) as $list |
 [range(0; $list | length; 4)] | label $out | foreach .[] as $i (
   $list; # arg1
