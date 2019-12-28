@@ -15,16 +15,8 @@ def toCoord(w; h; i):
   { x: (i % w), y: ((i / h) | floor) }
 ;
 
-def toCoord(i):
-  .
-;
-
 def parse:
   split("\n") | map(select(. != "") | split("")) as $rows | $rows[0] as $cols | { w: $cols | length, h: $rows | length, rows: $rows }
-;
-
-def getIndexForXY(x; y):
-  $width * y + x
 ;
 
 def tan(a; b):
