@@ -37,7 +37,7 @@ def iff(memory; mode; ptr; op; read; base):
     else
       # log("set", { mode: mode, ptr: ptr, op: op, base: base, read: read }) |
       if mode == 0 then
-        ptr |
+        ptr
       else
         base + ptr
       end
