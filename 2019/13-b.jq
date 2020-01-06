@@ -1,10 +1,48 @@
 include "./modules/log";
-include "./modules/paint";
 import "./modules/intcode" as INTCODE;
 
 def coords(c): c | join(",");
 
 split(",") | map(tonumber) as $memory |
+
+def tile:
+  if . == 0 then # empty
+    " "
+  elif . == 1 then # wall
+    "█"
+  elif . == 2 then # block
+    "░"
+  elif . == 3 then # paddle
+    "▔"
+  elif . == 4 then # ball
+    "o"
+  else
+    .
+  end
+;
+
+def xyToI(width; x; y): width * y + x + y;
+
+def screen:
+  .game as $game |
+  .game |
+  keys |
+  map(split(",") | map(tonumber)) as $coords |
+  $coords |
+  [max_by(.[0])[0] + 1, max_by(.[1])[1] + 1] as [$width, $height] |
+
+  {
+    width: $width,
+    height: $height,
+    data: (reduce range(0; $width * $height) as $i (
+      [];
+      . + [($game[coords([$i % $width, ($i / $width) | floor])] | tile)]
+    ) | . as $res | $res | reduce range(0; $height) as $i (
+      [];
+      . + ($res[$i * $width: ($i * $width) + $width] + ["\n"])
+    ))
+  }
+;
 
 def run:
   .[0] = 2 | # play for free
@@ -17,13 +55,12 @@ def run:
   .ball = 0 |
   .tmp = [] |
   .score = 0 |
-  .snap = [] |
+  .screen = [] |
 
-  until(
-    .halted;
+  while(
+    .halted | not;
 
     INTCODE::step(.ptr) |
-    # .stage = (.stage + 1) % 3 |
     if .output then
       .tmp += [.output] |
 
@@ -34,7 +71,18 @@ def run:
           coords(.tmp[:2]) as $cords |
           .game[$cords] = .tmp[2] |
 
-          if .game[$cords] == 4 and .paddle > -1 then
+          if .game[$cords] == 4 and .paddle > -1 and .screen == [] then # initialise the screen
+            .screen = screen # | .screen.data | halt_error
+          elif .screen != [] then
+            # update the screen
+            # .screen = screen(.tmp)
+            .screen as $screen |
+            .screen.data[xyToI($screen.width; .tmp[0]; .tmp[1])] = (.tmp[2] | tile)
+          else
+            .
+          end |
+
+          if .game[$cords] == 4 and .paddle > -1 then # we're playing
             .ball = .tmp[0] |
             . as $_ |
             if .ball < .paddle then
@@ -43,22 +91,9 @@ def run:
               INTCODE::readIn(1)
             else
               INTCODE::readIn(0)
-            end |
-
-            # now count tiles in case the game has ended
-            (.game | [to_entries[].value | select(. == 2)] | length) as $bricks |
-            # log1("bricks", $bricks, .score) |
-            if $bricks == 0 then
-              .game | paint | halt_error
-            else
-              .
             end
-
-            # | .snap = .snap + [(.game | paint)]
-
           elif .game[$cords] == 3 then
             .paddle = .tmp[0]
-            # . as $_ | .game | paint | halt_error | $_
           else
             .
           end
@@ -74,4 +109,5 @@ def run:
   )
 ;
 
-$memory | run | "Score: \(.score)\n\n\(.game | paint)"
+$memory | run |
+if .score > 0 then "\(.screen.data | join(""))\nScore: \(.score)" else empty end
