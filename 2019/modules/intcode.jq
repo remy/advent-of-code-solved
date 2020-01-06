@@ -57,12 +57,13 @@ def call:
         log2("input \(.input[0]) @ \(.args[0])", .)
         | .input = .input[1:] # "shift"
       else
-        log1("waiting for input") | del(.memory) | halt_error |
+        log1("waiting for input") | .error = "waiting for input" | del(.memory) | halt_error |
         .ptr = .ptr - 2 # back up the pointer and wait
       end
     elif .op == 4 then # output
       . + { output: .args[0], lastOutput: .args[0] } |
-      log1("output", .output, .name)
+      # log1("output", .output, .name)
+      .
     elif .op == 5 then # jump-if-true
       log("jump-if-true", .args[0] > 0, "\(.args[0]) > 0, ptr: \(.args[1])") |
       if .args[0] > 0 then
