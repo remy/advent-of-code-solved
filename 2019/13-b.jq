@@ -55,6 +55,7 @@ def run:
   .ball = 0 |
   .tmp = [] |
   .score = 0 |
+  .paint = false |
   .screen = [] |
 
   while(
@@ -63,6 +64,7 @@ def run:
     INTCODE::step(.ptr) |
     if .output then
       .tmp += [.output] |
+      .paint = false |
 
       if (.tmp | length) == 3 then
         if .tmp[0] == -1 then
@@ -77,7 +79,8 @@ def run:
             # update the screen
             # .screen = screen(.tmp)
             .screen as $screen |
-            .screen.data[xyToI($screen.width; .tmp[0]; .tmp[1])] = (.tmp[2] | tile)
+            .screen.data[xyToI($screen.width; .tmp[0]; .tmp[1])] = (.tmp[2] | tile) |
+            .paint = true
           else
             .
           end |
@@ -110,4 +113,4 @@ def run:
 ;
 
 $memory | run |
-if .score > 0 then "\(.screen.data | join(""))\nScore: \(.score)" else empty end
+if .paint == true then "\(.screen.data | join(""))\n\(.score)" else empty end
