@@ -12,6 +12,7 @@ def coords(c): c | join(",");
 5 as $ROBOT |
 6 as $START |
 7 as $RETRACE |
+8 as $OXYGEN_MARKER |
 [1,2,3,4] as [$N, $S, $W, $E] |
 
 split(",") | map(tonumber) as $memory |
@@ -148,7 +149,7 @@ def run:
 
 def expand:
   . as $res |
-  .grid | map_values(select(. == $OXYGEN)) |
+  .grid | map_values(select(. == $OXYGEN_MARKER)) |
   reduce to_entries[] as $coords (
     $res;
     . as $res |
@@ -169,19 +170,23 @@ def expand:
     else
       reduce .[] as $point (
         $res;
-        .grid[$point] = $OXYGEN
+        .grid[$point] = $OXYGEN_MARKER
       )
     end
+
+    | .grid[$coords.key] = $OXYGEN
+
   )
 ;
 
 # set to true to watch robot moving around
-$memory | run | .grid[coords(.oxygen)] = $OXYGEN | .i = 0 |
+$memory |
+run |
+.i = 0 |
+.grid[coords(.oxygen)] = $OXYGEN_MARKER |
 while(
-  .grid | map_values(select(. != $OXYGEN and . != $WALL)) | length != 0;
-  .i += 1 | # count the seconds
-  expand # keep expanding the gas
+  .grid | map_values(select(. != $OXYGEN and . != $OXYGEN_MARKER and . != $WALL)) | length != 0;
+  .i += 1 |
+  expand
 ) |
-# display
-[.i + 1, (.grid |PIXELS::paint(["█"," ","O","▒", "░", "o", "S", "⸬", "█"]; 8))][]
-
+[.i + 1, (.grid |PIXELS::paint(["█"," ","O","▒", "░", "o", "S", "⸬", "0", "█"]; 9))][]
