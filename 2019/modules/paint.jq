@@ -2,16 +2,19 @@ module { name: "pixel painter" };
 
 def coords(c): c | join(",");
 
-def paint(icons):
+def paint(icons; default):
   . as $pixels |
   keys | map(split(",") | map(tonumber)) as $coords | $coords |
-  [max_by(.[0])[0] + 1, max_by(.[1])[1] + 1] as [$width, $height] |
+  [min_by(.[0])[0], min_by(.[1])[1]] as [$widthMin, $heightMin] |
+  [max_by(.[0])[0] + 1, max_by(.[1])[1] + 1] as [$widthMax, $heightMax] |
+  ($widthMax - $widthMin) as $width |
+  ($heightMax - $heightMin) as $height |
 
-  def getXY($i): coords([$i % $width, ($i / $width) | floor]);
+  def getXY($i): coords([($i % $width) + $widthMin, (($i / $width) | floor) + $heightMin]);
 
   reduce range(0; $width * $height) as $i ([];
     . as $_ |
-    $pixels[getXY($i)] as $v |
+    ($pixels[getXY($i)] // default) as $v |
     . + [icons[$v]]
   ) | . as $res |
 
@@ -23,6 +26,6 @@ def paint(icons):
 
 # def paint($pixels): . as $tmp | $pixels | paint | debug | $tmp;
 
-def paint: paint([" ","█","░","—","o"]);
+def paint: paint([" ","█","░","—","o"]; 2);
 
 
