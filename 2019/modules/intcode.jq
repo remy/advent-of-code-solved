@@ -57,7 +57,7 @@ def call:
         log2("input \(.input[0]) @ \(.args[0])", .)
         | .input = .input[1:] # "shift"
       else
-        log1("waiting for input") | .error = "waiting for input" | del(.memory) | halt_error |
+        log1("waiting for input") | .error = "waiting for input" | del(.memory) | del(.grid) | halt_error |
         .ptr = .ptr - 2 # back up the pointer and wait
       end
     elif .op == 4 then # output
@@ -138,6 +138,8 @@ def step($ptr):
   end
 ;
 
+def step: step(.ptr);
+
 def readIn($input):
   if $input != null then
     .input += [$input] | log2("new input", .input)
@@ -160,3 +162,5 @@ def init(id):
     memory: .,
   }
 ;
+
+def init: init(1);
