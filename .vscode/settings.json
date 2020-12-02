@@ -1,0 +1,12 @@
+{
+  "runOnSave.commands": [
+    {
+      "match": ".*\\.bas\\.txt$",
+      "command": "txt2bas -i ${file} -o ${fileDirname}/${fileBasenameNoExtension}",
+      "runIn": "backend",
+      "runningStatusMessage": "Compiling ${fileBasename}",
+      "finishStatusMessage": "${fileBasename} compiled"
+    }
+  ],
+  "python.formatting.provider": "yapf"
+}

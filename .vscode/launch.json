@@ -1,0 +1,155 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "dezog",
+      "request": "launch",
+      "remoteType": "cspect",
+      "name": "cspect (nex)",
+      "zrcp": {
+        "hostname": "localhost",
+        "port": 10000
+      },
+      //"topOfStack": "Stack_Top",
+      "rootFolder": "${fileDirname}",
+      "listFiles": [
+        {
+          "path": "${fileDirname}/${fileBasenameNoExtension}.lst",
+          "useFiles": true,
+          "asm": "sjasmplus",
+          "mainFile": "${file}"
+        }
+      ],
+      "disassemblerArgs": {
+        "esxdosRst": true
+      },
+      "load": "${fileDirname}/${fileBasenameNoExtension}.nex",
+      // "skipInterrupt": true,
+      "startAutomatically": false,
+      "preLaunchTask": "build"
+    },
+    {
+      "type": "dezog",
+      "request": "launch",
+      "remoteType": "zxnext",
+      "name": "ZX Next (nex)",
+      "zxnext": {
+        "port": 12000
+      },
+      //"topOfStack": "Stack_Top",
+      "rootFolder": "${fileDirname}",
+      "listFiles": [
+        {
+          "path": "${fileDirname}/${fileBasenameNoExtension}.lst",
+          "useFiles": true,
+          "asm": "sjasmplus",
+          "mainFile": "${file}"
+        }
+      ],
+      "disassemblerArgs": {
+        "esxdosRst": true
+      },
+      "load": "${fileDirname}/${fileBasenameNoExtension}.nex",
+      // "skipInterrupt": true,
+      "startAutomatically": false,
+      "preLaunchTask": "build"
+    },
+    {
+      "type": "dezog",
+      "request": "launch",
+      "remoteType": "cspect",
+      "name": "cspect (sna)",
+      "zrcp": {
+        "hostname": "localhost",
+        "port": 10000
+      },
+      //"topOfStack": "Stack_Top",
+      "rootFolder": "${fileDirname}",
+      "listFiles": [
+        {
+          "path": "${fileDirname}/${fileBasenameNoExtension}.lst",
+          "useFiles": true,
+          "asm": "sjasmplus",
+          "mainFile": "${file}"
+        }
+      ],
+      "disassemblerArgs": {
+        "esxdosRst": true
+      },
+      "load": "${fileDirname}/${fileBasenameNoExtension}.sna",
+      "skipInterrupt": false,
+      "startAutomatically": false,
+      "preLaunchTask": "build"
+    },
+    {
+      "type": "dezog",
+      "request": "launch",
+      "name": "Internal (nex)",
+      "remoteType": "zsim",
+      "zsim": {
+        "visualMemory": "ZX48"
+        //"Z80N": true,
+      },
+      "listFiles": [
+        {
+          "path": "${fileDirname}/${fileBasenameNoExtension}.lst",
+          "asm": "sjasmplus",
+          "mainFile": "${file}"
+        }
+      ],
+      "history": {
+        "reverseDebugInstructionCount": 1000000,
+        "spotCount": 10,
+        "codeCoverageEnabled": true
+      },
+      "startAutomatically": false,
+      "skipInterrupt": true,
+      "commandsAfterLaunch": [
+        "-logpoint enable",
+        "-assert enable",
+        "-wpmem enable"
+      ],
+      "disassemblerArgs": {
+        "esxdosRst": true
+      },
+      "rootFolder": "${workspaceFolder}",
+      // "topOfStack": "stack_top",
+      "load": "${fileDirname}/${fileBasenameNoExtension}.nex",
+      "smallValuesMaximum": 513,
+      "tmpDir": ".tmp",
+      "preLaunchTask": "sjasmplus"
+    },
+    {
+      "type": "dezog",
+      "request": "launch",
+      "name": "Internal (sna)",
+      "remoteType": "zsim",
+      "zsim": {
+        "visualMemory": "ZX48",
+        "loadZxRom": true
+        //"Z80N": true,
+      },
+      //          "topOfStack": "Stack_Top",
+      "rootFolder": "${fileDirname}",
+      "sjasmplus": [
+        {
+          "path": "${fileDirname}/${fileBasenameNoExtension}.lst",
+          "useFiles": true,
+          "asm": "sjasmplus",
+          "mainFile": "${file}"
+        }
+      ],
+      "disassemblerArgs": {
+        "numberOfLines": 20,
+        "esxdosRst": true
+      },
+      "load": "${fileDirname}/${fileBasenameNoExtension}.sna",
+      "skipInterrupt": false,
+      "startAutomatically": false,
+      "preLaunchTask": "sjasmplus"
+    }
+  ]
+}

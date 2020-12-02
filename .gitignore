@@ -1,0 +1,6 @@
+*.lst
+*.labels
+.tmp
+*/z80/*.map
+*/z80/*.bin
+!*/z80/*.input.bin
