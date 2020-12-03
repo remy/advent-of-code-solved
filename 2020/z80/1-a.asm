@@ -1,12 +1,12 @@
-        DEVICE ZXSPECTRUM48
+	DEVICE ZXSPECTRUM48
 
-target 	equ 2020
+target 	equ 2020			; the value our two numbers need to add up to
 
 	org $8000
 start:
 	di				; disable any interrupts
 main:
-	ld hl, (ptrOuter)			; load ptr with source position
+	ld hl, (ptrOuter)		; load ptr with source position
 
 	ld e, (hl)			; store first item in the array in de
 	inc hl
@@ -15,38 +15,32 @@ main:
 	ld bc, de			; save the first value to bc
 
 next:
-	ld de, (ptrInner)			; ptr += 2
+	ld de, (ptrInner)		; ptr += 2
 	inc de
 	inc de
-	ld (ptrInner), de			; save ptr
+	ld (ptrInner), de		; save ptr
 
-	; TODO if de == 400 (source.length * 2) - then reset
-
-	ld hl, (ptrInner)			; set de to source(ptr)
+	ld hl, (ptrInner)		; set de to source(ptr)
 	ld e, (hl)
 	inc hl
 	ld d, (hl)
 
-	ld a, 0					; check 16bit zero value
+	ld a, 0				; check 16bit zero value
 	cp e
 	jr nz, test
 	cp d
 	jr nz, test
 
 	; if the value *was* zero, then we increment the outer pointer, and copy to inner pointer
-	ld de, (ptrOuter)			; ptr += 2
+	ld de, (ptrOuter)		; ptr += 2
 	inc de
 	inc de
-	ld (ptrOuter), de			; save ptr
+	ld (ptrOuter), de		; save ptr
 	ld (ptrInner), de
 
 	jr main
 
 test:
-
-	; if de === 0 then we've hit the marker and we need to increment i (outer pointer stored in bc)
-
-
 	ld hl, target			; hl = 2020 (res)
 
 					; required for sbc to work the way we want
@@ -62,7 +56,6 @@ test:
 
 
 mul16:
-; via http://cpctech.cpc-live.com/docs/mult.html
 ; multiplies DE and BC togther
 ; Inputs:
 ;     DE
@@ -71,6 +64,7 @@ mul16:
 ;     A
 ; Outputs:
 ;     HL is the result
+; via http://cpctech.cpc-live.com/docs/mult.html
 
     	ld a,16				; this is the number of bits of the number to process
     	ld hl,0				; HL is updated with the partial result, and at the end it will hold
@@ -96,9 +90,12 @@ mul16:
 	;; at this point DE has been multiplied by 2
 
 	dec a
-	jr nz, .mul_loop  ;; process more bits
+	jr nz, .mul_loop  ; process more bits
 	ret
 
+end:
+
+					; multiply bc and de to hl for our answer
 DivHLby10:
 ; via http://z80-heaven.wikidot.com/math#toc21
 ;Inputs:
@@ -120,14 +117,9 @@ DivHLby10:
 	sub c
 	inc l
 	djnz $-7
-	ret
 
-end:
-	; multiply bc and de to hl
-	call mul16
 
-	; now display the number in hl
-printChr
+printChr				; now display the number in hl
 	call DivHLby10
 	add a, $30			; $30 is ascii "0"
 	rst $10				; print A register
@@ -138,9 +130,12 @@ printChr
 	cp l
 	jr nz, printChr
 
+	; fin
 	jr $
 
-	org $9000	; put the data on an edge so we can nav
+
+;;;;;;;;;;;;;;   DATA N BITS    ;;;;;;;;;;;;;
+
 source:
 	incbin "./1.input.bin"
 	dw 0				; end marker
