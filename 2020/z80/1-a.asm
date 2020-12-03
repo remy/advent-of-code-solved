@@ -1,6 +1,6 @@
 	DEVICE ZXSPECTRUM48
-
 target 	equ 2020			; the value our two numbers need to add up to
+
 
 	org $8000
 start:
@@ -25,10 +25,8 @@ next:
 	inc hl
 	ld d, (hl)
 
-	ld a, 0				; check 16bit zero value
-	cp e
-	jr nz, test
-	cp d
+	ld a, e				; if de === 0 then jump to test
+	or d
 	jr nz, test
 
 	; if the value *was* zero, then we increment the outer pointer, and copy to inner pointer
@@ -43,9 +41,8 @@ next:
 test:
 	ld hl, target			; hl = 2020 (res)
 
+	or a				; reset carry bit
 					; required for sbc to work the way we want
-	scf 				; set carry bit
-	ccf 				; flip carry bit
 
 	sbc hl, de			; res = 2020 - source[j]
 	sbc hl, bc			; res -= source[i]
@@ -54,7 +51,32 @@ test:
 
 	jr next
 
+DivHLby10:
+; multiply bc and de to hl for our answer
+; via http://z80-heaven.wikidot.com/math#toc21
+;Inputs:
+;     HL
+;Outputs:
+;     HL is the quotient
+;     A is the remainder
+;     DE is not changed
+;     BC is 10
+	ld bc,$0D0A
+	xor a
+	add hl,hl : rla
+	add hl,hl : rla
+	add hl,hl : rla
 
+	add hl,hl : rla
+	cp c
+	jr c,$+4
+	sub c
+	inc l
+	djnz $-7
+	ret
+
+
+end:
 mul16:
 ; multiplies DE and BC togther
 ; Inputs:
@@ -81,49 +103,22 @@ mul16:
 	add hl,de			; will get to here if carry = 1
 
 .no_add
-	;; at this point BC has already been divided by 2
+	; at this point BC has already been divided by 2
 
 	ex de,hl			; swap DE and HL
 	add hl,hl			; multiply DE by 2
 	ex de,hl			; swap DE and HL
 
-	;; at this point DE has been multiplied by 2
+	; at this point DE has been multiplied by 2
 
 	dec a
 	jr nz, .mul_loop  ; process more bits
-	ret
-
-end:
-
-					; multiply bc and de to hl for our answer
-DivHLby10:
-; via http://z80-heaven.wikidot.com/math#toc21
-;Inputs:
-;     HL
-;Outputs:
-;     HL is the quotient
-;     A is the remainder
-;     DE is not changed
-;     BC is 10
-	ld bc,$0D0A
-	xor a
-	add hl,hl : rla
-	add hl,hl : rla
-	add hl,hl : rla
-
-	add hl,hl : rla
-	cp c
-	jr c,$+4
-	sub c
-	inc l
-	djnz $-7
-
 
 printChr				; now display the number in hl
 	call DivHLby10
 	add a, $30			; $30 is ascii "0"
 	rst $10				; print A register
-	ld a, 0
+	xor a				; zero out A register
 
 	cp h				; if HL is zero we're done, if not, keep printing
 	jr nz, printChr
