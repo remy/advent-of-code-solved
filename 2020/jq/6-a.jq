@@ -1,19 +1,19 @@
 def sum:
-	reduce .[] as $i (0; . + $i)
+  reduce .[] as $i (0; . + $i)
 ;
 
 def mapper:
-	reduce .[] as $i (
+  reduce .[] as $i (
       {};
-	  . + { ($i): (.[$i] + 1) }
+    . + { ($i): (.[$i] + 1) }
     )
 ;
 
 # merges group answers and gets the total count
 def mergeAndCount:
-	reduce (.[] | to_entries[]) as $root ({}; . +
-		{ ($root.key): 1 }
-	) | length
+  reduce (.[] | to_entries[]) as $root ({}; . +
+    { ($root.key): 1 }
+  ) | length
 ;
 
 rtrimstr("\n") | split("\n\n") |

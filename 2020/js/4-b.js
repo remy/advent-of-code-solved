@@ -26,12 +26,14 @@ const numValidator = (min, max) => {
     if (year < min) return false;
     if (year > max) return false;
 
+    if (isNaN(year)) return false;
+
     return true;
   };
 };
 
-const fieldValidators = {
-  byr: numValidator(1920, 2020),
+export const fieldValidators = {
+  byr: numValidator(1920, 2002),
   iyr: numValidator(2010, 2020),
   eyr: numValidator(2020, 2030),
   hgt(value) {
