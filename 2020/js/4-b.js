@@ -30,8 +30,8 @@ const numValidator = (min, max) => {
   };
 };
 
-export const fieldValidators = {
-  byr: numValidator(1920, 2002),
+const fieldValidators = {
+  byr: numValidator(1920, 2020),
   iyr: numValidator(2010, 2020),
   eyr: numValidator(2020, 2030),
   hgt(value) {
