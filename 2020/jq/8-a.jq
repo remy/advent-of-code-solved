@@ -9,17 +9,11 @@ def parse:
   )
 ;
 
-def nop($opand):
-  .
-;
+def nop($opand): . ;
 
-def jmp($opand):
-  .PC = .PC + $opand
-;
+def jmp($opand): .PC = .PC + $opand ;
 
-def acc($opand):
-  .A = .A + $opand
-;
+def acc($opand): .A = .A + $opand ;
 
 def incrementCall:
   . as $_ |
@@ -33,8 +27,6 @@ def incrementCall:
     )
   }
 ;
-
-def step: jmp(1);
 
 def run:
   incrementCall |
