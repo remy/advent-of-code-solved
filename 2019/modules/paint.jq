@@ -24,8 +24,9 @@ def paint(icons; default):
   )
 ;
 
-# def paint($pixels): . as $tmp | $pixels | paint | debug | $tmp;
-
 def paint: paint([" ","█","░","—","o"]; 2);
+# def paint($pixels): paint($pixels; 2) . as $tmp | $pixels | paint | debug | $tmp;
+def paint($pixels): paint($pixels; 2);
+
 
 

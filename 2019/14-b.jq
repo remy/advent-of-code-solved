@@ -30,7 +30,6 @@ add | # convert array to object
 
 def makesTrillion:
   . as $n | $start | calcReaction("FUEL"; $n).ORE.required > 1000000000000
-  # . == 2944565   or . > 2944565
 ;
 
 # only using the searchPow method takes about 16 seconds, combining with
@@ -47,7 +46,7 @@ def searchPow:
 def searchBin:
   . as [$base, $top] |
   { i: $base, inc: (($top - $base) / 2 | floor) } |
-  if .inc == 1 then
+  if .inc == 0 then
     $top
   else
     while(
@@ -58,6 +57,8 @@ def searchBin:
 ;
 
 1 | [. | searchPow] | # get the initial range
+
+debug |
 until(
   length == 1;
   [. | .[-2:] | searchBin] # then do a binary search until we're narrow enough

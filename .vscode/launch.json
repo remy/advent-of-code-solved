@@ -128,26 +128,26 @@
       "name": "Internal (sna)",
       "remoteType": "zsim",
       "zsim": {
-        "visualMemory": "ZX48",
-        "loadZxRom": true
-        //"Z80N": true,
+        "zxKeyboard": true,
+        "ulaScreen": true,
+        "visualMemory": true,
+        "vsyncInterrupt": true,
+        "memoryModel": "ZX48K"
       },
-      //          "topOfStack": "Stack_Top",
       "rootFolder": "${fileDirname}",
+      // "rootFolder": "${workspaceFolder}"
       "sjasmplus": [
         {
-          "path": "${fileDirname}/${fileBasenameNoExtension}.lst",
+          "path": "${fileDirname}/${fileBasenameNoExtension}.sld",
           "useFiles": true,
           "asm": "sjasmplus",
-          "mainFile": "${file}"
+          "mainFile": "${fileDirname}/${fileBasenameNoExtension}.asm"
         }
       ],
       "disassemblerArgs": {
-        "numberOfLines": 20,
         "esxdosRst": true
       },
       "load": "${fileDirname}/${fileBasenameNoExtension}.sna",
-      "skipInterrupt": false,
       "startAutomatically": false,
       "preLaunchTask": "sjasmplus"
     }

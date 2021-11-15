@@ -2,6 +2,7 @@
 *.labels
 .tmp
 */z80/*.map
+*/z80/*.sld
 */z80/*.bin
 !*/z80/*.input.bin
 node_modules

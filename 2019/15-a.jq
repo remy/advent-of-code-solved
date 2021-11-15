@@ -57,7 +57,6 @@ def get($dir; $_):
   $_ | (.grid[coords(.position | move($dir))] // 3)
 ;
 
-
 def tryTurning($forced):
   . as $res |
   .direction as $dir |

@@ -44,7 +44,9 @@
       },
       "command": "sjasmplus",
       "args": [
-        "--lst=${fileDirname}/${fileBasenameNoExtension}.lst",
+        "--sld=${fileDirname}/${fileBasenameNoExtension}.sld",
+        "--fullpath",
+        // "--lst=${fileDirname}/${fileBasenameNoExtension}.lst",
         "--zxnext=cspect",
         "--nologo",
         "${file}",

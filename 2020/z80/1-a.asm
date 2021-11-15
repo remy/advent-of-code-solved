@@ -1,4 +1,5 @@
 	DEVICE ZXSPECTRUM48
+	SLDOPT COMMENT WPMEM
 target 	equ 2020			; the value our two numbers need to add up to
 
 
@@ -116,7 +117,7 @@ mul16:
 
 printChr				; now display the number in hl
 	call DivHLby10
-	add a, $30			; $30 is ascii "0"
+	add a, $30			; $30 is ascii "0" so we're shifting the number into ascii printable range
 	rst $10				; print A register
 	xor a				; zero out A register
 

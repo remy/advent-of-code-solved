@@ -68,7 +68,11 @@ def run:
 
       if (.tmp | length) == 3 then
         if .tmp[0] == -1 then
-          .score = .tmp[2]
+          if .tmp[2] != .score then
+            .score = .tmp[2] | .paint = true
+          else
+          .
+          end
         else
           coords(.tmp[:2]) as $cords |
           .game[$cords] = .tmp[2] |
@@ -78,9 +82,11 @@ def run:
           elif .screen != [] then
             # update the screen
             # .screen = screen(.tmp)
-            .screen as $screen |
-            .screen.data[xyToI($screen.width; .tmp[0]; .tmp[1])] = (.tmp[2] | tile) |
-            .paint = true
+            .screen as $screen | .
+
+            # DISPLAY
+            # | .screen.data[xyToI($screen.width; .tmp[0]; .tmp[1])] = (.tmp[2] | tile) |
+            # .paint = true
           else
             .
           end |
@@ -113,4 +119,5 @@ def run:
 ;
 
 $memory | run |
-if .paint == true then "\(.screen.data | join(""))\n\(.score)" else empty end
+# if .paint == true then "\(.screen.data | join(""))\n\(.score)" else empty end
+if .paint == true then .score else empty end
