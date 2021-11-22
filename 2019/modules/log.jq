@@ -1,4 +1,4 @@
-def devel: 100;
+def devel: 0;
 
 def log(level; s): . as $_ | if devel > level then [s] | debug else 0 end | $_;
 def log(s): log(10; s);

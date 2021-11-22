@@ -2,6 +2,8 @@ module { name: "pixel painter" };
 
 def coords(c): c | join(",");
 
+# @param {string[]} icons: array of printable characters
+# @param {string} default: the value to print if no icon available at index
 def paint(icons; default):
   . as $pixels |
   keys | map(split(",") | map(tonumber)) as $coords | $coords |
