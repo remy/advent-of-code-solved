@@ -5,11 +5,11 @@ const input = process.argv[2];
 if (!input) process.exit(1);
 
 const data = Uint16Array.from(
-  readFileSync(__dirname + '/../' + input, 'utf-8')
+  readFileSync('./' + input, 'utf-8')
     .split('\n')
-    .filter((_) => _.trim())
+    .filter(Boolean)
     .map((_) => parseInt(_, 10))
 );
 
 const file = new TextEncoder().encode(data);
-writeFileSync(`${__dirname}/${input}.bin`, data);
+writeFileSync(`${process.cwd()}/${input}.bin`, data);
