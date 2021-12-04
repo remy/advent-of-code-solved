@@ -1,4 +1,4 @@
-const input = require('fs').readFileSync('./1.input', 'utf8');
+const input = require('fs').readFileSync('../1.input', 'utf8');
 
 input
   .split('\n')
