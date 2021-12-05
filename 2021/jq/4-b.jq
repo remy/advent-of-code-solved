@@ -2,7 +2,7 @@ def log(arg): . as $_ | [arg] | debug | $_;
 def log: debug;
 
 def arrayFromIndex($i): map(.[$i]);
-def tidyOutput: del(.boards) | del(.shadow) | del(.draw);
+def tidyOutput: del(.boards) | del(.shadow) | del(.draw) | del(.incompleteBoards);
 
 
 def buildBoards:
@@ -41,28 +41,38 @@ def addWinningBoardInfo(boardIndex):
   }
 ;
 
-def checkBoard:
-  . as $_ |
-  foreach range($_.shadow | length) as $boardIndex (
-    .; # init
-    . as $__ | foreach range(.shadow[$boardIndex] | length) as $row (
-      $_.shadow[$boardIndex]; # init
-      if ((.[$row] | add) == 5) or ((arrayFromIndex($row) | add) == 5)
-      then
-        if $_.incompleteBoards[$boardIndex] == 0 then
-          $_ | addWinningBoardInfo($boardIndex) |
-          # log($boardIndex, .drawn, if $boardIndex == 55 then [.shadow[$boardIndex], .boards[$boardIndex]] else empty end) |
-          error
+def getCompletedBoards:
+  [
+    foreach range(.shadow | length) as $board (
+      .;
+      .;
+      foreach range(.shadow[$board] | length) as $row (
+        .;
+        .;
+        if (
+          (.shadow[$board][$row] | add) == 5 or
+          (.shadow[$board] | arrayFromIndex($row) | add) == 5) then
+          $board
         else
-          . # already completed, then ignore it
+          empty
         end
-      else
-        .
-      end; # update
-      $__ # extact
-    ); # update
-    . # extract
-  ) | $_
+      )
+    )
+  ] | unique
+;
+
+def checkBoard:
+  # 1. get a list of board ids that have completed lines
+  reduce getCompletedBoards[] as $completed (
+    .;
+  # 2. loop through the list, ignoring ones that are already complete
+    if .incompleteBoards[$completed] == 0 then
+  # 3. mark as complete and capture id
+      addWinningBoardInfo($completed)
+    else
+      .
+    end
+  )
 ;
 
 def collectUnmarked:
@@ -83,9 +93,9 @@ def collectUnmarked:
 def play:
   [foreach .draw[] as $draw (
     .;
-    .drawn = $draw| markBoards($draw) | try checkBoard catch .;
+    .drawn = $draw| markBoards($draw) | checkBoard;
     if (.incompleteBoards | map(select(. == 0)) | length) == 0 then
-      error(.)
+      error(.) # early exit
     else
       .
     end
