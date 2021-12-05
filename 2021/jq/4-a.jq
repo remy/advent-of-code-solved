@@ -38,9 +38,7 @@ def checkBoard:
     .;
     foreach range($_.shadow[$boardIndex] | length) as $row (
       $_.shadow[$boardIndex];
-      if (.[$row] | add) == 5 then
-        $_ | . + { winningBoard: $boardIndex } | error
-      elif ($_.shadow[$boardIndex] | arrayFromIndex($row) | add) == 5 then
+      if ((.[$row] | add) == 5) or (($_.shadow[$boardIndex] | arrayFromIndex($row) | add) == 5) then
         $_ | . + { winningBoard: $boardIndex } | error
       else .
       end;
