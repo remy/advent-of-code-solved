@@ -1,11 +1,12 @@
 # My Advent of Code entries
 
-- [2022 using jq](https://github.com/remy/advent-of-code-solved/tree/master/2022/jq)
-- [2021 using jq](https://github.com/remy/advent-of-code-solved/tree/master/2021/jq)
-- [2021 using Z80 asm](https://github.com/remy/advent-of-code-solved/tree/master/2021/z80)
-- [2021 using JavaScript](https://github.com/remy/advent-of-code-solved/tree/master/2021/js)
-- [2020 using jq](https://github.com/remy/advent-of-code-solved/tree/master/2020/jq)
-- [2019 using jq](https://github.com/remy/advent-of-code-solved/tree/master/2019)
+- [2022](https://github.com/remy/advent-of-code-solved/tree/master/2022/)
+- [2021](https://github.com/remy/advent-of-code-solved/tree/master/2021/)
+  - [using jq](https://github.com/remy/advent-of-code-solved/tree/master/2021/jq)
+  - [using Z80 asm](https://github.com/remy/advent-of-code-solved/tree/master/2021/z80)
+  - [using JavaScript](https://github.com/remy/advent-of-code-solved/tree/master/2021/js)
+- [2020](https://github.com/remy/advent-of-code-solved/tree/master/2020)
+- [2019](https://github.com/remy/advent-of-code-solved/tree/master/2019)
 
 
 ## Running jq code
