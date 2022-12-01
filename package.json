@@ -14,14 +14,14 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "./bin/jq"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/remy/advent-of-code-solved.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Remy Sharp",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/remy/advent-of-code-solved/issues"
