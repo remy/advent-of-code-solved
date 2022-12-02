@@ -12,7 +12,9 @@
   "description": "- [2019 using jq](https://github.com/remy/advent-of-code-solved/tree/master/2019) - [2020 using JavaScript](https://github.com/remy/advent-of-code-solved/tree/master/2020/js) - [2020 using jq](https://github.com/remy/advent-of-code-solved/tree/master/2020/jq)",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^18.11.10"
+  },
   "scripts": {
     "dev": "./bin/jq"
   },
