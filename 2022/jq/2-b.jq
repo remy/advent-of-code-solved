@@ -29,6 +29,5 @@ map(
   split(" ") | # get left and right
   predict |
   map(values) | # convert to scoring
-  score as $win | # capture whether it was win, lose or draw
-  .[1] + ($win | scoring)
+  .[1] + (score | scoring)
 ) | add

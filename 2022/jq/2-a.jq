@@ -12,12 +12,10 @@ def score:
 
 def scoring: if . < 0 then 0 elif . == 0 then 3 else 6 end;
 
-
 split("\n") |
 map(
   select(. != "") | # filter empty
   split(" ") | # get left and right
   map(values) | # convert to scoring
-  score as $win | # capture whether it was win, lose or draw
-  .[1] + ($win | scoring)
+  .[1] + (score | scoring)
 ) | add
