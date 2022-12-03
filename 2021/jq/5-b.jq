@@ -13,7 +13,7 @@ def interpolate($p1; $p2):
 		# vertical
 		reduce rangeFor($p1; $p2; "x") as $x ([]; . + [{ x: $x, y: $p1.y }])
 	else
-		empty
+		[[rangeFor($p1; $p2; "x")], [rangeFor($p1; $p2; "y")]] | transpose | map({ x: .[0], y: .[1]})
 	end
 ;
 def interpolate: interpolate(.[0]; .[1]);
