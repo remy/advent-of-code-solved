@@ -3,4 +3,4 @@
 INPUT=$(echo $1 | sed "s/jq\/\([0-9]*\).*/\1.sample/")
 
 echo "jq -s -R -f $1 $INPUT"
-nodemon -q -x "jq -s -R -f $1 $INPUT" -e jq
+nodemon -q -x "jq -s -R -r -f $1 $INPUT" -e jq
