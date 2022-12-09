@@ -36,7 +36,7 @@ def stepValue($tail; $x; $y):
     elif .visited then
       "#"
     elif $index != null then
-      $index | tostring
+      ($index + 1) | tostring
     else
       "."
     end
@@ -56,6 +56,7 @@ def splitter($n): "~" | repeatN($n);
 def clear: "\n" | repeatN(38);
 def count: flatten | map(select(.visited)) | length;
 def render($grid): "\(clear)\(splitter($grid.width))\n\(renderState($grid))\n\(splitter($grid.width))\n\(count)";
+# def render($grid): count;
 
 def setInitialPoint($grid):
   { x: $grid.extra[0], y: $grid.extra[1] } as $init |
@@ -110,7 +111,10 @@ def moveT($head):
   if $y == 0 or $x == 0 then # single axis movement
     moveSingleAxis($x; $y)
   else # diagonal
-    if $y | fabs == 2 then
+    if ($y | fabs == 2) and ($x | fabs == 2) then
+      moveSingleAxis(0; $y) |
+      moveSingleAxis($x; 0)
+    elif $y | fabs == 2 then
       .tail.x = $head.x |
       moveSingleAxis(0; $y)
     elif $x | fabs == 2 then
