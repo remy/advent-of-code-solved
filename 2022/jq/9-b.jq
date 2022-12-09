@@ -1,5 +1,5 @@
 def log(s): . as $_ | if [s] | length > 0 then [s] | debug else empty end | $_;
-def log(s): .;
+def log(s): .; # this let's me turn logging on and off easily
 
 def parse: split("\n") | map(select(. != "") | split(" ") | { dir: .[0], n: .[1] | tonumber }) ;
 
@@ -25,7 +25,8 @@ def calcGrid:
 ;
 
 def repeatN($n): . as $_ | [range(0; $n)] | map($_) | join("");
-def stepValue:
+def stepValue($tail; $x; $y):
+    ($tail | index({ x: $x, y: $y })) as $index |
     if .s then
       "s"
     elif .h then
@@ -34,31 +35,35 @@ def stepValue:
       "T"
     elif .visited then
       "#"
+    elif $index != null then
+      $index | tostring
     else
       "."
     end
 ;
 def renderState($grid):
-  . as $movement |
+  .snake as $tail |
+  .grid as $movement |
   reduce range(0; $grid.height) as $y (
     [];
     . + [reduce range(0; $grid.width) as $x (
       [];
-      . + [($movement[$y][$x] | stepValue) // "."]
+      . + [($movement[$y][$x] | stepValue($tail; $x; $y)) // "."]
     ) | join("")]
   ) | reverse | join("\n");
 
 def splitter($n): "~" | repeatN($n);
-def clear: "\n" | repeatN(4);
+def clear: "\n" | repeatN(38);
 def count: flatten | map(select(.visited)) | length;
 def render($grid): "\(clear)\(splitter($grid.width))\n\(renderState($grid))\n\(splitter($grid.width))\n\(count)";
 
 def setInitialPoint($grid):
   { x: $grid.extra[0], y: $grid.extra[1] } as $init |
   log("init", $init) |
-  .grid[$init.y][$init.x] = { visited: true, t: true, h: true, s: true } + $init |
-  .head = $init |
+  .grid[$init.y][$init.x] = { visited: true, h: true, s: true } + $init |
+  .snake = ([range(0;9)] | map($init)) |
   .tail = $init |
+  .head = $init |
   .
 ;
 
@@ -98,36 +103,40 @@ def moveSingleAxis($x; $y):
   end
 ;
 
-def moveT:
-  remove("tail") |
-  (.head.x - .tail.x) as $x |
-  (.head.y - .tail.y) as $y |
+def moveT($head):
+  ($head.x - .tail.x) as $x |
+  ($head.y - .tail.y) as $y |
 
   if $y == 0 or $x == 0 then # single axis movement
     moveSingleAxis($x; $y)
   else # diagonal
     if $y | fabs == 2 then
-      .tail.x = .head.x |
+      .tail.x = $head.x |
       moveSingleAxis(0; $y)
     elif $x | fabs == 2 then
-      .tail.y = .head.y |
+      .tail.y = $head.y |
       moveSingleAxis($x; 0)
     else
       .
     end
-  end |
-  add("tail") |
-  visit
+  end
+;
+
+def moveTails:
+  reduce range(0; .snake | length) as $i (
+    .;
+    .tail = .snake[$i] |
+    moveT(if $i == 0 then .head else .snake[$i - 1] end) |
+    .snake[$i] = .tail
+  ) |
+  visit # only apply to the _end_ of the tail
 ;
 
 def moveH($axis; $direction):
-  # 1. remove H from current position
   remove("head") |
-  # 2. update position
   .head[$axis] = (.head[$axis] + $direction) |
-  # 3. update H
   add("head") |
-  moveT
+  moveTails
 ;
 def moveH($axis): moveH($axis; 1);
 
@@ -152,7 +161,7 @@ def walkSteps($state; $grid):
       log("U") |
       moveH("y")
     end;
-    .grid | render($grid)
+    render($grid)
   )
 ;
 
@@ -163,11 +172,7 @@ def explodeSteps:
   )
 ;
 
-log("") |log("") |log("") |log("") |log("") |log("") |log("") |log("") |log("") |log("") |log("") |log("") |log("") |log("") |log("") |log("") |log("") |
-log("=======================") |
 parse |
 calcGrid as $grid |
-log("grid", $grid) |
 explodeSteps |
 walkSteps(init($grid); $grid)
-# $grid
