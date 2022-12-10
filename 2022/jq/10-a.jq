@@ -51,7 +51,6 @@ def process:
 
   if .nextIn == 0 then
     if .next.op == "addx" then
-      # log("perform op", .reg.x, .next.opand, .reg.x + .next.opand) |
       .reg.x += .next.opand
     else . end
   else . end |
@@ -68,5 +67,8 @@ def run:
 
 log("==============================") |
 
-parse | initState | log(del(.prog)) | run
-| del(.prog) + { total: .memory | add } | .total
+parse |
+initState |
+run |
+{ total: .memory | add } |
+.total
