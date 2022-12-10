@@ -1,6 +1,6 @@
 # 2022
 
-These are my entries into the [advent of code 2022](https://adventofcode.com/2022) using the "language" [jq](https://stedolan.github.io/jq/) (not a language at all, but a command line JSON processor!).
+These are my entries into the [advent of code 2022](https://adventofcode.com/2022) using the "language" [jq](https://stedolan.github.io/jq/) (more of a JSON transform processor than for programming, but we'll make it do!).
 
 ## Solved
 
