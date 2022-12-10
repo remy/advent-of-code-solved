@@ -19,7 +19,7 @@ def initState:
     nextIn: 0,
     ptr: 0,
     ticks: 0,
-    totalTicks: . | map(cycles[.op]) | add,
+    totalTicks: map(cycles[.op]) | add,
     reg: { x: 1 },
     memory: [],
     cycles: cycles
