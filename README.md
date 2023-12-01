@@ -1,5 +1,6 @@
 # My Advent of Code entries
 
+- [2023](https://github.com/remy/advent-of-code-solved/tree/master/2023/)
 - [2022](https://github.com/remy/advent-of-code-solved/tree/master/2022/)
 - [2021](https://github.com/remy/advent-of-code-solved/tree/master/2021/)
   - [using jq](https://github.com/remy/advent-of-code-solved/tree/master/2021/jq)
