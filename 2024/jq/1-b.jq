@@ -4,7 +4,6 @@ map(
   map(tonumber)
 ) |
 transpose |
-map(sort) |
 . as $_ |
 reduce range(.[0] | length) as $i (
   0;
