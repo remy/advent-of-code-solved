@@ -2,5 +2,7 @@
 
 INPUT=$(echo $1 | sed "s/jq\/\([0-9]*\).*/\1.sample/")
 
-echo "jq -R ${@:2} -f $1 $INPUT"
-nodemon -q -x "clear;echo ----------------------------; date; echo jq -R -r ${@:2} -f $1 $INPUT;echo ----------------------------; jq -R -r ${@:2} -f $1 $INPUT" -e jq
+CMD="jq -R -rn ${@:2} -f $1 $INPUT"
+
+eval $CMD
+nodemon -q -x "clear;echo ----------------------------; date; echo $CMD;echo ----------------------------; $CMD" -e jq
