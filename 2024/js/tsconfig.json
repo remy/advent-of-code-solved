@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "lib": ["esnext"],
+    "target": "es5"
+  },
+  "include": ["./**/*"],
+  "exclude": ["node_modules", "__tests__"]
+}

@@ -5,7 +5,6 @@
     ]
   },
   "dependencies": {
-    "ava": "^3.13.0",
     "esm": "^3.2.25"
   },
   "name": "advent-of-code",
@@ -13,7 +12,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "devDependencies": {
-    "@types/node": "^18.11.10"
+    "@types/node": "^22.10.1"
   },
   "scripts": {
     "dev": "./bin/jq"
