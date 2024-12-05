@@ -15,8 +15,6 @@ def debug(n): . as $_ | n | debug | $_;
       true
     elif .[1].string == "mul" then
       (.[2].string | tonumber) * (.[3].string | tonumber)
-    else
-      debug | empty
     end
   ),
   do: true,
