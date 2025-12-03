@@ -1,8 +1,6 @@
 import { promises as fs } from 'fs';
 
-console.log('-'.repeat(20));
-
-const file = (await fs.readFile('2024/4.sample', 'utf8'))
+const file = (await fs.readFile('2024/4.input', 'utf8'))
   .trim()
   .split('\n')
   .map((_) => _.trim().split(''));
@@ -17,60 +15,54 @@ const state = {
   grid: file,
 };
 
-const allDirections = [-1, 0, 1]
-  .flatMap((dx) => [-1, 0, 1].map((dy) => [dx, dy]))
-  .filter(([x, y]) => x || y);
-
 let found = 0;
 
 do {
   const coords = findStart(state);
-  if (!coords) {
+  if (!coords || coords.y === state.h - 3) {
     break;
   }
   state.ptr.x = coords.x;
   state.ptr.y = coords.y;
 
-  found += search(state, coords, allDirections);
+  found += search(state, coords);
 } while (inc());
 
 console.log(found);
 
-function search(state, coords, directions) {
-  if (coords.x > state.w - 2 || coords.y > state.h - 2) {
+function search(state, coords) {
+  if (coords.x > state.w - 3 || coords.y > state.h - 3) {
     return 0;
   }
 
   // now collect a 3x3 grid, first checking for A
   // in the middle
-  const slice = state.grid.slice();
+  const slice = state.grid
+    .slice(coords.y, coords.y + 3)
+    .map((_) => _.slice(coords.x, coords.x + 3));
 
-  return directions.reduce((acc, [x, y]) => {
-    const test = { ...coords };
-    test.x += x;
-    test.y += y;
-    if (match(state, 'M', test)) {
-      test.x += x;
-      test.y += y;
-      if (match(state, 'A', test)) {
-        test.x += x;
-        test.y += y;
-        if (match(state, 'S', test)) {
-          return acc + 1;
-        }
-      }
-    }
-
-    return acc;
-  }, 0);
-}
-
-function match(state, letter, { x, y }) {
-  if (x < 0 || x >= state.w || y < 0 || y >= state.h) {
-    return false;
+  if (slice[1][1] !== 'A') {
+    return 0;
   }
 
-  return state.grid[y][x] === letter;
+  const s = `${slice[0][0]}${slice[0][2]}${slice[2][0]}${slice[2][2]}`;
+
+  if (s === 'MSMS' || s === 'SMSM') {
+    // console.log(s);
+    return 1;
+  }
+
+  return 0;
+
+  if (slice[0][0] === 'M' && slice[0][2] === 'S')
+    if (slice[2][2] === 'S' && slice[2][0] === 'M') return 1;
+
+  if (slice[0][2] === 'M' && slice[0][0] === 'S')
+    if (slice[2][2] === 'M' && slice[0][0] === 'M') return 1;
+
+  // console.log(found, slice);
+  // return found == 2 ? 1 : 0;
+  return 0;
 }
 
 function inc() {
@@ -90,7 +82,8 @@ function findStart(input) {
   let { x, y } = ptr;
 
   while (y < h) {
-    if (grid[y][x] === 'M') {
+    const p = grid[y][x];
+    if (p === 'M' || p === 'S') {
       return { x, y };
     }
 

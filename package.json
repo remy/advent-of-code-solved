@@ -11,8 +11,12 @@
   "description": "- [2019 using jq](https://github.com/remy/advent-of-code-solved/tree/master/2019) - [2020 using JavaScript](https://github.com/remy/advent-of-code-solved/tree/master/2020/js) - [2020 using jq](https://github.com/remy/advent-of-code-solved/tree/master/2020/jq)",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "devDependencies": {
-    "@types/node": "^22.10.1"
+    "@types/node": "^22.10.1",
+    "eslint": "^9.16.0",
+    "eslint-define-config": "^2.1.0",
+    "globals": "^15.13.0"
   },
   "scripts": {
     "dev": "./bin/jq"
