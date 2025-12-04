@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-INPUT=$(echo $1 | sed "s/jq\/\([0-9]*\).*/\1.sample/")
+INPUT=$(echo $1 | sed "s/\([0-9]*\).*/\1.sample/")
 
 CMD="jq -R -rn ${@:2} -f $1 $INPUT"
 
